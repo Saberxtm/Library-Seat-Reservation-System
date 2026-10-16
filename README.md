@@ -55,10 +55,10 @@ Library-Seat-Reservation-System/
 
 | Member | Student ID | Contribution |
 |---|---|---|
-| Member 1 | To be added | Problem definition and requirements |
-| Member 2 | To be added | Container diagram |
-| Member 3 | To be added | Architecture decision record |
-| Member 4 | To be added | Repository and documentation |
+| Dias | 240107070 | Problem definition and requirements |
+| Kazbekbi | To be added | Container diagram |
+| Yerassyl | 240107092 | Architecture decision record |
+| Assylbek | 240107068 | Repository and documentation |
 
 Replace these placeholders with your actual team members and student IDs.
 
