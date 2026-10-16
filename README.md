@@ -56,16 +56,12 @@ Library-Seat-Reservation-System/
 | Member | Student ID | Contribution |
 |---|---|---|
 | Dias | 240107070 | Problem definition and requirements |
-| Kazbekbi | To be added | Container diagram |
+| Kazbekbi | 240107060 | Container diagram |
 | Yerassyl | 240107092 | Architecture decision record |
 | Assylbek | 240107068 | Repository and documentation |
-
-Replace these placeholders with your actual team members and student IDs.
 
 ## 8. Project Status
 
 **Milestone 1:** Project scope and requirements defined.
 
 **Milestone 2:** Initial architecture documentation and repository structure prepared.
-
-**Implementation:** Planned for a later development stage.
