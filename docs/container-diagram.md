@@ -2,11 +2,11 @@
 
 ## Containers
 
-| Container | Technology | Responsibility |
+| Container | Responsibility |
 |---|---|---|
-| Web Application | React | Provides the interface for students and library staff. |
-| Backend API | Python, FastAPI | Handles reservations, validates availability, prevents overlapping bookings, and enforces access rules. |
-| Database | PostgreSQL | Stores seats, reservation records, and necessary user references. |
+| Web Application | Provides the interface for students and library staff. |
+| Backend API | Handles reservations, validates availability, prevents overlapping bookings, and enforces access rules. |
+| Database | Stores seats, reservation records, and necessary user references. |
 
 ## Diagram
 
