@@ -36,7 +36,3 @@ flowchart TB
 2. The web application sends HTTPS/JSON requests to the backend API.
 3. The backend API reads and writes seat and reservation data in PostgreSQL.
 4. The backend API communicates with the university authentication service to verify user identity and roles.
-
-## Architecture Note
-
-The system uses Layered Architecture. The web application handles presentation, the backend handles business logic, and PostgreSQL provides persistent storage. University authentication is an external service.
