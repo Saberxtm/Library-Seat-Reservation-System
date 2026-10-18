@@ -3,7 +3,7 @@
 ## Containers
 
 | Container | Responsibility |
-|---|---|---|
+|---|---|
 | Web Application | Provides the interface for students and library staff. |
 | Backend API | Handles reservations, validates availability, prevents overlapping bookings, and enforces access rules. |
 | Database | Stores seats, reservation records, and necessary user references. |
