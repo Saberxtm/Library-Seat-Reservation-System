@@ -1,11 +1,16 @@
+from uuid import uuid4
+from datetime import datetime, timezone
+from events import ReservationCreated, EventBus
+
+
 class ReservationService:
 
-    def __init__(self, repository):
+    def __init__(self, repository, event_bus=None):
         self.repository = repository
+        self.event_bus = event_bus or EventBus()
 
     def create(self, reservation, seats):
 
-        # Check if the seat exists
         seat_exists = False
 
         for seat in seats:
@@ -15,7 +20,6 @@ class ReservationService:
         if not seat_exists:
             raise ValueError("Seat not found")
 
-        # Check if the seat is already booked
         for existing in self.repository.get_all():
             if (
                 existing["seat_id"] == reservation["seat_id"]
@@ -24,5 +28,15 @@ class ReservationService:
             ):
                 raise ValueError("Seat is already reserved")
 
-        # Save to the database
-        return self.repository.save(reservation)
+        result = self.repository.save(reservation)
+
+        event = ReservationCreated(
+            eventId=str(uuid4()),
+            reservationId=result["id"],
+            studentId=reservation["student_id"],
+            occurredAt=datetime.now(timezone.utc)
+        )
+
+        self.event_bus.publish(event)
+
+        return result
