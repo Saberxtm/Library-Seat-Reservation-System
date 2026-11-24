@@ -2,8 +2,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from repository import ReservationRepository
 from services import ReservationService
-from events import EventBus
-from consumers import NotificationConsumer
+from events import EventBus, ReservationCreated, ReservationCancelled
+from consumers import NotificationConsumer, CancellationConsumer
 
 app = FastAPI()
 
@@ -16,9 +16,17 @@ seats = [
 repository = ReservationRepository()
 
 event_bus = EventBus()
-notification_consumer = NotificationConsumer()
 
-event_bus.subscribe(notification_consumer)
+notification_consumer = NotificationConsumer()
+cancellation_consumer = CancellationConsumer()
+
+event_bus.subscribe(
+    notification_consumer, ReservationCreated
+)
+
+event_bus.subscribe(
+    cancellation_consumer, ReservationCancelled
+)
 
 service = ReservationService(repository, event_bus)
 
@@ -64,4 +72,23 @@ def get_reservations():
 
 @app.get("/notifications")
 def get_notifications():
-    return {"notifications": notification_consumer.notifications}
+    return {
+        "notifications": notification_consumer.notifications,
+        "cancellations": cancellation_consumer.notifications
+    }
+
+@app.delete("/reservations/{reservation_id}")
+def cancel_reservation(reservation_id: int):
+    try:
+        result = service.cancel(reservation_id)
+
+        return {
+            "message": "Reservation cancelled successfully",
+            "reservation": result
+        }
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=404,
+            detail=str(error)
+        )

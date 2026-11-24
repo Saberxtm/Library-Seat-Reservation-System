@@ -46,3 +46,23 @@ class ReservationRepository:
                 "date": new_reservation.date,
                 "time": new_reservation.time
             }
+
+    def delete(self, reservation_id):
+        with SessionLocal() as db:
+            reservation = db.query(Reservation).filter(
+                Reservation.id == reservation_id
+            ).first()
+
+            if reservation is None:
+                raise ValueError("Reservation not found")
+
+            result = {
+                "id": reservation.id,
+                "student_id": reservation.student_id,
+                "seat_id": reservation.seat_id
+            }
+
+            db.delete(reservation)
+            db.commit()
+
+            return result

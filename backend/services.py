@@ -1,6 +1,6 @@
 from uuid import uuid4
 from datetime import datetime, timezone
-from events import ReservationCreated, EventBus
+from events import ReservationCreated, ReservationCancelled, EventBus
 
 
 class ReservationService:
@@ -34,6 +34,21 @@ class ReservationService:
             eventId=str(uuid4()),
             reservationId=result["id"],
             studentId=reservation["student_id"],
+            occurredAt=datetime.now(timezone.utc)
+        )
+
+        self.event_bus.publish(event)
+
+        return result
+
+    def cancel(self, reservation_id):
+
+        result = self.repository.delete(reservation_id)
+
+        event = ReservationCancelled(
+            eventId=str(uuid4()),
+            reservationId=result["id"],
+            studentId=result["student_id"],
             occurredAt=datetime.now(timezone.utc)
         )
 
