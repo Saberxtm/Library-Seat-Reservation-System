@@ -1,8 +1,9 @@
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from repository import ReservationRepository
 from services import ReservationService
+from events import EventBus
+from consumers import NotificationConsumer
 
 app = FastAPI()
 
@@ -13,7 +14,13 @@ seats = [
 ]
 
 repository = ReservationRepository()
-service = ReservationService(repository)
+
+event_bus = EventBus()
+notification_consumer = NotificationConsumer()
+
+event_bus.subscribe(notification_consumer)
+
+service = ReservationService(repository, event_bus)
 
 
 class Reservation(BaseModel):
@@ -37,16 +44,24 @@ def get_seats():
 def create_reservation(reservation: Reservation):
     try:
         result = service.create(reservation.model_dump(), seats)
+
         return {
             "message": "Reservation created successfully",
             "reservation": result
         }
+
     except ValueError as error:
         if str(error) == "Seat not found":
             raise HTTPException(status_code=404, detail=str(error))
+
         raise HTTPException(status_code=409, detail=str(error))
 
 
 @app.get("/reservations")
 def get_reservations():
     return {"reservations": repository.get_all()}
+
+
+@app.get("/notifications")
+def get_notifications():
+    return {"notifications": notification_consumer.notifications}
